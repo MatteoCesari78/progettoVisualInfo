@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>progetto</title>
+<script type="text/javascript" src="d3.min.js"></script>
+</head>
+<body>
+<svg width="1600" height="900"></svg>
+<script type="text/javascript">
+
+var scalex = d3.scaleLinear();
+var scaley = d3.scaleLinear();
+scalex.range([0, 1600]);
+scaley.range([0, 900]);
+scalex.domain([0, 100]);
+scaley.domain([0, 100]);
+
+var i = 0;
+var set;
+var mosche;
+
+d3.json("dataset.json").then(function(data) {
+console.log(data);
+set = data;
+});
+
+setTimeout(draw, 500);
+
+function draw() {
+
+console.log("draw");
+console.log(set);
+
+mosche = d3.select("svg").selectAll("path")
+.data(set);
+
+mosche.enter()
+.append("path")
+.attr("d", function(d) { return (
+"M"+(scalex(d.mosca[i]))+","+(scaley(d.mosca[i+1]))+ 
+" Q"+(scalex(d.mosca[i])+10)+","+(scaley(d.mosca[i+1])-10)+
+" "+(scalex(d.mosca[i])+20)+","+(scaley(d.mosca[i+1]))+
+" Q"+(scalex(d.mosca[i])+50)+","+(scaley(d.mosca[i+1])+60)+
+" "+(scalex(d.mosca[i])+10)+","+(scaley(d.mosca[i+1])+30)+
+" Q"+(scalex(d.mosca[i])-30)+","+(scaley(d.mosca[i+1])+60)+
+" "+(scalex(d.mosca[i]))+","+(scaley(d.mosca[i+1])) )})
+.attr("fill", "transparent")
+.attr("stroke-width", 2)
+.attr("stroke", "black")
+.on("click", up);
+
+i = i + 2;
+
+}
+
+
+function up() {
+
+console.log("up");
+
+mosche = d3.select("svg").selectAll("path")
+.data(set);
+
+mosche.exit().remove();
+
+if(i==6){i=0}
+
+mosche.transition().duration(3000)
+.attr("d", function(d) { return (
+"M"+(scalex(d.mosca[i]))+","+(scaley(d.mosca[i+1]))+ 
+" Q"+(scalex(d.mosca[i])+10)+","+(scaley(d.mosca[i+1])-10)+
+" "+(scalex(d.mosca[i])+20)+","+(scaley(d.mosca[i+1]))+
+" Q"+(scalex(d.mosca[i])+50)+","+(scaley(d.mosca[i+1])+60)+
+" "+(scalex(d.mosca[i])+10)+","+(scaley(d.mosca[i+1])+30)+
+" Q"+(scalex(d.mosca[i])-30)+","+(scaley(d.mosca[i+1])+60)+
+" "+(scalex(d.mosca[i]))+","+(scaley(d.mosca[i+1])) )});
+
+i = i + 2;
+
+}
+
+</script>
+</body>
+</html>
